@@ -1,0 +1,34 @@
+<div class="container">
+    <table class="table table-striped">
+        <tr>
+            <th>Description</th>
+            <th>Flavor</th>
+            <th>Price</th>
+            <th>Picture</th>
+            <th>Acciones</th>
+        </tr>
+        {{#each cerebros}}
+        <div class="col-md-3">
+            <tr>
+                    <td>{{description}}</td>
+                    <td>{{flavor}}</td>
+                    <td>{{price}}</td>
+                    <td>{{picture}}</td>
+                    <td>
+                        <a href="/cerebros/edit/{{_id}}">
+                            <i class="fas fa-edit" title="Actualizar"></i>
+                        </a>
+                        <form action="/cerebros/delete/{{_id}}?_method=DELETE" method="POST">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button class="btn btn-link"><i class="fas fa-trash text-danger " title="Eliminar"></i></button>
+                        </form>
+                    </td>
+                </tr>
+        </div>
+        {{/each}}
+
+    </table>
+
+</div>
+
+<a href="/cerebros/add"><button class="btn btn-outline-success"><i class="fas fa-plus" style="margin: 5px;"></i>Agregar nuevo Cerebro</button></a>
