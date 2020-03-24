@@ -7,11 +7,34 @@ zombiesCtrl.renderZombiesForm = (req, res) => {
 };
 
 zombiesCtrl.createNewZombie = async(req, res) => {
+    const errors = [];
     const { nombre, email, type } = req.body;
-    const newZombie = new Zombie({ nombre, email, type })
-    await newZombie.save();
+    if (nombre.length < 0) {
+        errors.push({ text: 'Debe de estar lleno el campo de nombre' });
+    }
+    if (nombre.length < 4) {
+        errors.push({ text: 'El nombre debe de ser mayor a 4 caracteres' });
+    }
+    if (nombre.length > 12) {
+        errors.push({ text: 'El nombre debe de ser menor a 12 caracteres' });
+    }
+    if (email.length == 0) {
+        errors.push({ text: 'El email es obligatorio' });
+    }
+    if ((type.length != 6) && (type.length != 7)) {
+        errors.push({ text: 'en el campo tipo debe de poner si usted es alumno o maestro' });
+    }
 
-    res.redirect('/zombies')
+    if (errors.length > 0) {
+        res.render('zombies/new-zombie', {
+            errors
+        })
+    } else {
+        const newZombie = new Zombie({ nombre, email, type })
+        await newZombie.save();
+        req.flash('success_mgs', 'Zombie agregado');
+        res.redirect('/zombies');
+    }
 };
 
 zombiesCtrl.renderZombies = async(req, res) => {
@@ -29,11 +52,13 @@ zombiesCtrl.renderEditForm = async(req, res) => {
 zombiesCtrl.updateZombie = async(req, res) => {
     const { nombre, email, type } = req.body;
     await Zombie.findByIdAndUpdate(req.params.id, { nombre, email, type });
+    req.flash('success_mgs', 'Zombie Actualizado');
     res.redirect('/zombies');
 };
 
 zombiesCtrl.deleteZombie = async(req, res) => {
     await Zombie.findByIdAndDelete(req.params.id);
+    req.flash('success_mgs', 'Zombie eliminado');
     res.redirect('/zombies')
 };
 

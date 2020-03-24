@@ -1,24 +1,24 @@
 const { Router } = require('express');
 const router = Router();
-
+const { isAuthenticated } = require('../helpers/auth');
 
 const { renderCerebrosForm, createNewCerebros, renderCerebros, renderEditForm, updatecerebro, deleteCerebro } = require('../controllers/cerebros.controlles');
 
 //New cerebro
-router.get('/cerebros/add', renderCerebrosForm);
+router.get('/cerebros/add', isAuthenticated, renderCerebrosForm);
 
-router.post('/cerebros/new-cerebro', createNewCerebros);
+router.post('/cerebros/new-cerebro', isAuthenticated, createNewCerebros);
 
 //Get All cerebros
-router.get('/cerebros', renderCerebros);
+router.get('/cerebros', isAuthenticated, renderCerebros);
 
 //edit cerebros
-router.get('/cerebros/edit/:id', renderEditForm);
+router.get('/cerebros/edit/:id', isAuthenticated, renderEditForm);
 
-router.put('/cerebros/edit/:id', updatecerebro);
+router.put('/cerebros/edit/:id', isAuthenticated, updatecerebro);
 
 //delete cerebro
-router.delete('/cerebros/delete/:id', deleteCerebro);
+router.delete('/cerebros/delete/:id', isAuthenticated, deleteCerebro);
 
 
 module.exports = router;
